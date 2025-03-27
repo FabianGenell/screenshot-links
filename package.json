@@ -1,0 +1,19 @@
+{
+  "name": "screenshot-links",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "install:browsers": "npx playwright install chromium",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Script to take full-page screenshots of multiple URLs",
+  "dependencies": {
+    "p-limit": "^6.2.0",
+    "playwright": "^1.51.1"
+  }
+}
