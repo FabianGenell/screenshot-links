@@ -1,0 +1,23 @@
+{
+    "viewport": {
+        "width": 390,
+        "height": 844
+    },
+    "removeSelectors": [
+        ".cookie-banner",
+        ".newsletter-popup",
+        ".ads",
+        ".needs-click",
+        ".needsclick",
+        "#shopify-pc__banner",
+        "#zonos",
+        "#Avada-CookiesBar"
+    ],
+    "waitBeforeScreenshot": 1000,
+    "outputPath": "./screenshots/portfolio/[domain].png",
+    "concurrencyLimit": 3,
+    "retryCount": 3,
+    "timeout": 5000,
+    "fullPage": false,
+    "urls": ["https://test.com/"]
+}

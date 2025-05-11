@@ -1,18 +1,19 @@
 # Screenshot Links
 
-A Node.js ES6 script that takes full-page screenshots of multiple URLs using Playwright.
+A Node.js ES6 script that takes screenshots of multiple URLs using Playwright with extensive configuration options.
 
 ## Features
 
 - Takes screenshots of multiple URLs in PNG format
-- Saves screenshots in folders organized by domain
-- Auto-scrolls to capture the full page and trigger animations
+- Configurable viewport size and full page vs. viewport-only screenshots
+- Ability to remove/hide unwanted elements (cookie banners, popups, etc.)
+- Custom wait time before capturing screenshots
+- Flexible output path configuration
+- Auto-scrolls to trigger animations
 - Limits concurrency to avoid getting blocked
-- Sets viewport width to 1440px
 - Uses ES6 module syntax
-- Automatic retry mechanism (up to 3 attempts) for failed screenshots
-- 5-second timeout for each screenshot attempt
-- Filenames based on URL path (converted to slug format)
+- Automatic retry mechanism for failed screenshots
+- Configurable timeout for each screenshot attempt
 
 ## Installation
 
@@ -30,22 +31,89 @@ npm run install:browsers
 
 ## Usage
 
-1. Edit the URLs in the `urls.json` file with your desired URLs
-2. Run the script:
+1. Provide URLs in one of two ways:
+   - Add them to the `urls` array in `config.json` (recommended)
+   - Or create a separate `urls.json` file with an array of URLs
+2. Customize settings in `config.json` (will be created with defaults if not present)
+3. Run the script:
 
 ```bash
 npm start
 ```
 
-## Screenshot Location
+## Configuration
 
-Screenshots are saved in the `./screenshots/{domain}` folder, with filenames based on the URL path. For example:
-- `https://example.com/blog/post-1` → `screenshots/example.com/blog-post-1.png`
-- `https://example.com` → `screenshots/example.com/index.png`
+Create a `config.json` file in the root directory with the following options:
 
-## Customization
+```json
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "removeSelectors": [
+    ".cookie-banner",
+    ".newsletter-popup",
+    ".ads"
+  ],
+  "waitBeforeScreenshot": 1000,
+  "outputPath": "./screenshots/[domain]/[name].png",
+  "concurrencyLimit": 3,
+  "retryCount": 3,
+  "timeout": 5000,
+  "fullPage": true,
+  "urls": [
+    "https://example.com",
+    "https://example.org"
+  ]
+}
+```
 
-- Edit the viewport size in the `takeScreenshotWithRetry` function
-- Change the concurrency limit in the script by modifying the `CONCURRENCY_LIMIT` constant
-- Adjust the retry count by modifying the `retries` parameter in `takeScreenshotWithRetry`
-- Modify the timeout duration (default: 5000ms) in the screenshot promise race
+### Configuration Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `viewport` | Set the width and height of the browser viewport | `{ width: 1440, height: 900 }` |
+| `removeSelectors` | Array of CSS selectors to hide before taking screenshot | `[]` |
+| `waitBeforeScreenshot` | Time in milliseconds to wait before capturing | `0` |
+| `outputPath` | Template for file paths with `[domain]` and `[name]` placeholders | `./screenshots/[domain]/[name].png` |
+| `concurrencyLimit` | How many URLs to process simultaneously | `3` |
+| `retryCount` | Number of retry attempts for failed screenshots | `3` |
+| `timeout` | Screenshot capture timeout in milliseconds | `5000` |
+| `fullPage` | Whether to capture the entire page (`true`) or just the viewport (`false`) | `true` |
+| `urls` | Array of URLs to capture screenshots of | `[]` |
+
+## Examples
+
+### Mobile Screenshot
+
+```json
+{
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "fullPage": false
+}
+```
+
+### Remove Cookie Banners and Ads
+
+```json
+{
+  "removeSelectors": [
+    ".cookie-banner",
+    ".newsletter-popup",
+    ".ads",
+    "#shopify-pc__banner"
+  ]
+}
+```
+
+### Custom Output Path
+
+```json
+{
+  "outputPath": "./screenshots/portfolio/[domain].png"
+}
+```
