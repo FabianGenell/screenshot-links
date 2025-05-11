@@ -137,3 +137,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 .shopify
+urls.json
+
+**/.claude/settings.local.json
